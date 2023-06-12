@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="94.747795mm"
+   height="14.382077mm"
+   viewBox="0 0 94.747795 14.382077"
+   version="1.1"
+   id="svg13080"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="vocurdle3.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview13082"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.914906"
+     inkscape:cx="303.30985"
+     inkscape:cy="418.07573"
+     inkscape:window-width="3072"
+     inkscape:window-height="1631"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs13077" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-24.766249,-37.949029)">
+    <text
+       xml:space="preserve"
+       style="font-weight:bold;font-size:19.7556px;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';fill:#fbfbfb;stroke-width:0.264583"
+       x="24.292114"
+       y="52.054527"
+       id="text14292"><tspan
+         sodipodi:role="line"
+         id="tspan14290"
+         style="stroke-width:0.264583"
+         x="24.292114"
+         y="52.054527"><tspan
+   style="fill:#e68ab2;fill-opacity:1"
+   id="tspan15070">VOC</tspan>URDLE</tspan></text>
+  </g>
+</svg>
