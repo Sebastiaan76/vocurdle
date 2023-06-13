@@ -39,7 +39,8 @@ async function checkWord(word) {
     formData.append('word', word);
     
     // Await for the score to return - here we call our submitform
-    const word_score = await submitForm(formData);
+    const data = await submitForm(formData, '/calculate');
+    const word_score = data.game_score; 
 
     if (word_score === null) {
         errorMsg.innerHTML = "Unknown Word"
@@ -60,28 +61,24 @@ async function checkWord(word) {
     const wordScoreDiv = currentForm.querySelector('.word-score');
     wordScoreDiv.textContent = word_score; 
 
-    
-
     // if all checks pass - return true
     return true;
 }
 
 
-
-// this function submits the word to the calculate route 
-async function submitForm(formData) {
+// this function submits formData to the backend and returns a json response - route should be a string as '/<route>'
+async function submitForm(formData, route) {
     try {
-      const response = await fetch('/calculate', {
+      const response = await fetch(route, {
         method: 'POST',
         body: formData
       });
-      if (!response.ok) {
+      if (!response.ok && response.status !== 400) { // whilst 400's are errors, we want to capture the response
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
   
-      // this is the score for the word
-      return data.game_score;
+      return data;
   
     } catch (error) {
       console.error('Error:', error);

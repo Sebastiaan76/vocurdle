@@ -17,7 +17,6 @@ const showInfo = () => {
     infoModal.showModal();
 }
 
-
 // add Event listeners
 help.addEventListener('click', showHelp);
 info.addEventListener('click', showInfo);
@@ -47,6 +46,24 @@ lastFocusedInput.focus();
 const menu_flip = document.querySelector(".flip-card-inner"); 
 const menu_content = document.querySelector(".flip-card-back");
 
+// Sidenav forms ( register & login )
+async function menuFormHandler(menu_event){
+    menu_event.preventDefault(); // we don't want a page reload - let the JS do it's work.
+    const form = menu_event.target.closest('form');
+    const formData = new FormData(form);
+    const formAction = new URL(form.action); // we use this to strip the path from the form.action attribute
+    const data = await submitForm(formData, formAction.pathname.toString());
+
+    if (data) {
+        console.log(data.message);
+        menu_content.innerHTML = 
+        `<div class="menu-form"><h1>${data.message}</h1><br>
+        <button class="reset-button" onclick="flip()">Close</button></div>`;
+    } else {
+        console.log("No response from the server");
+    }
+}
+
 function flip() {
     if (menu_flip.style.transform === "rotateY(180deg)") {
         menu_flip.style.transform = "rotateY(0deg)"; // flip it back on re-click
@@ -62,7 +79,7 @@ function handleMenuAction(menuId) {
         case 'register-menu':
             htmlContent = `
               <div class="menu-form">
-              <form action="/register" method="post">
+              <form action="/register" method="post" onsubmit="menuFormHandler(event);">
               <h1>Register</h1>
               <p>Please fill in this form to create an account.</p>
               <hr>
