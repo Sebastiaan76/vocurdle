@@ -11,10 +11,10 @@
     <header>
       <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a id="register-menu" onclick="handleMenuAction(this.id)" href="#">Register</a>
-        <a id="login-menu" onclick="handleMenuAction(this.id)" href="#">Login</a>
-        <a id="logout-menu" onclick="handleMenuAction(this.id)" href="#">Logout</a>
-        <a id="stats-menu" onclick="handleMenuAction(this.id)" href="#">Stats</a>
+        <a id="register-menu" onclick="handleMenuAction(this.id); closeNav()" href="#">Register</a>
+        <a id="login-menu" onclick="handleMenuAction(this.id); closeNav()" href="#">Login</a>
+        <a id="logout-menu" onclick="handleMenuAction(this.id); closeNav()" href="#">Logout</a>
+        <a id="stats-menu" onclick="handleMenuAction(this.id); closeNav()" href="#">Stats</a>
       </div>
       <div>
           <img onclick="openNav()" class="menu nav-icon" id="menu-button" src="../static/icons/menu_FILL0_wght400_GRAD0_opsz48.svg" alt="menu">

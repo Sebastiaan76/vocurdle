@@ -60,20 +60,19 @@ def register():
         pass_conf = request.form.get("pass_conf")
         
         if not user_id:
-            return "enter a username", 400
+            return jsonify({'message': "Enter a username"}), 400
 
         # Ensure password was submitted
         elif not hashed_password:
-            return "enter a password", 400
+            return jsonify({'message': "Enter a password"}), 400
         
         # Ensure confirmation password was submitted
         elif not pass_conf:
-            return "confirm password", 400
+            return jsonify({'message': "Confirm Password"}), 400
         
         # check if they match
         if pass_conf != request.form.get("password"):
-            return "passwords don't match", 400
-        
+            return jsonify({'message': "Passwords don't match"}), 400
         # Database stuff
         conn = sqlite3.connect("words.db")
         c = conn.cursor()
@@ -82,33 +81,14 @@ def register():
         # check if the user exists
         if row is not None:
             conn.close()
-            return "user already exists", 400
+            return jsonify({'message': "User already exists"}), 400
 
         c.execute("INSERT INTO users (user_id, password, games_played, highest_score, cumulative_score) VALUES (?, ?, ?, ?, ?)", 
               (user_id, hashed_password, 0, 0, 0))
         conn.commit()
         conn.close()
         
-        return "user registered", 200
-
-        
-    
-    
-    
-    # Query database for username
-   #rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
-
-    # if username already exists, apologise
-    #if len(rows) > 0:
-     #   return apology("Username already exists", 400)
-    
-    # put the user into the system
-    #db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", request.form.get(
-     #   "username"), generate_password_hash(request.form.get("password")))
-
-
-
-
+        return jsonify({'message': "Registered Succesfully!"}), 200
 
 def get_letters():
     vowels = 'aeiou'
