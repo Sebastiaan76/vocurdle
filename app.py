@@ -32,8 +32,50 @@ def vocurdle():
     potential_score = info["potential_score"]
     required_letters = info["required_letters"]
 
-    # rows is a list of tuples [("jazzy", 280), "short"]
-    return render_template("index.html", words_tuple=words_tuple, potential_score=potential_score, start_letter=required_letters[0], vowel_letter=required_letters[1])
+    # check if there is an active session, and if so, send the user_id
+    if session:
+        logged_in = session["user_id"]
+    else:
+        logged_in = ""
+
+    return render_template("index.html", still_logged_in=logged_in, words_tuple=words_tuple, potential_score=potential_score, start_letter=required_letters[0], vowel_letter=required_letters[1])
+
+@app.route("/update_stats", methods=["POST"])
+def update_stats():    
+    if request.method == "POST":
+        word = request.form.get("word")
+        game_score = get_word_value(word)
+
+        return 200
+
+@app.route("/gameover", methods=["POST"])
+def gameover():
+    if request.method == "POST":
+        # read the JSON
+        data = request.get_json()
+        score = data["score"]
+        
+        # lets update the database
+        conn = sqlite3.connect("words.db")
+        c = conn.cursor()
+
+        # update the users game count++
+        c.execute("UPDATE users SET games_played = games_played + 1 WHERE user_id = ?", (session["user_id"],))
+        conn.commit()
+
+        # check if this is their best score so far, if so, update it
+        c.execute("UPDATE users SET highest_score = ? WHERE user_id = ? AND highest_score < ?", (score, session["user_id"], score))
+        conn.commit()
+
+        # Update the cumulative score
+        c.execute("UPDATE users SET cumulative_score = cumulative_score + ? WHERE user_id = ?", (score, session["user_id"]))
+        conn.commit()
+
+        conn.close()
+
+
+        return jsonify({'message': 'data received'})
+
 
 
 @app.route("/calculate", methods=["POST"])
@@ -44,13 +86,50 @@ def calculate():
 
         return jsonify({'game_score': game_score}), 200
 
+@app.route('/logout', methods=["POST"])
+def logout():
+    if request.method == "POST":
+        data = request.get_json()
+        if data["logout"] == "true":
+            logging_out = session["user_id"]
+            session.clear()
+            return jsonify({'message': f'user {logging_out} logged out'})
+
 
 @app.route("/login", methods=["GET", "POST"])
-def login():
+def login(): 
     if request.method == "POST":
+        session.clear()
         user_id = request.form.get("user_id")
         password = request.form.get("password")
-        # TODO validate user
+
+        # Ensure username was submitted
+        if not request.form.get("user_id"):
+            return jsonify({'message': "Enter User id"}), 400
+
+        # Ensure password was submitted
+        elif not request.form.get("password"):
+            return jsonify({'message': "Enter Password"}), 400
+
+        conn = sqlite3.connect("words.db")
+        c = conn.cursor()
+        c.execute("SELECT user_id, password FROM users WHERE user_id = ?", (user_id,))
+        row = c.fetchone()
+        if not row:
+            return jsonify({'message': 'User not found'}), 400
+        # Ensure username exists and password is correct
+        if len(row) != 2 or not check_password_hash(row[1], request.form.get("password")):
+            return jsonify({'message': "Invalid Username/Password"}), 400
+
+        # Remember which user has logged in
+        session["user_id"] = row[0]
+        conn.close()
+
+        # User is logged in
+        return jsonify({'message': f'User {user_id} Logged In', 'logged_in': 'true', 'user_id': f'{user_id}'}), 200
+
+    else:
+        return jsonify({'message': "Error"}), 400
 
 @app.route("/register", methods=["POST"])
 def register():

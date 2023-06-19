@@ -15,6 +15,7 @@
         <a id="login-menu" onclick="handleMenuAction(this.id); closeNav()" href="#">Login</a>
         <a id="logout-menu" onclick="handleMenuAction(this.id); closeNav()" href="#">Logout</a>
         <a id="stats-menu" onclick="handleMenuAction(this.id); closeNav()" href="#">Stats</a>
+        <div class="logged_in"></div>
       </div>
       <div>
           <img onclick="openNav()" class="menu nav-icon" id="menu-button" src="../static/icons/menu_FILL0_wght400_GRAD0_opsz48.svg" alt="menu">
@@ -94,6 +95,11 @@
       const top_words = {{ words_tuple|tojson|safe }};
       const s_letter = "{{ start_letter }}";
       const v_letter = "{{ vowel_letter }}";
+      const logged_in_on_refresh = "{{ still_logged_in }}";
+      const logged_in = document.querySelector(".logged_in");
+      if (logged_in_on_refresh !== ""){
+        logged_in.innerHTML = `Logged in: ${logged_in_on_refresh}`;
+      }
     </script>
   </body>
 </html>

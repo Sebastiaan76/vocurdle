@@ -105,10 +105,11 @@ function resetForm() {
     document.activeElement.blur();
   }
 
-  function gameOver() {
+  async function gameOver() {
     disableAllForms();
     const flip = document.querySelector(".flip-card-inner");
     flip.style.transform = "rotateY(180deg)";
+    flipped = true;
     
     const game_over = document.querySelector(".flip-card-back");
     const wordList = top_words.map(word => `<p>${word[0]} for ${word[1]} points</p>`).join('');
@@ -119,6 +120,44 @@ function resetForm() {
     <p>${wordList}</p><br>
     <button class="reset-button" onclick="location.reload()">Restart Game</button>`;
     console.log("Game Over");
+    try {
+      await sendData('/gameover', {'score': score});
+  } catch (error) {
+      console.error('Error:', error);
+  }
 
   }
+
+// generic function used to send non-form data to the backend using JSON
+async function sendData(url = '', data = {}) {
+  const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+  });
+
+  if (!response.ok) {
+      const message = `An error has occurred: ${response.status}`;
+      throw new Error(message);
+  }
+
+  const json = await response.json();
+  return {
+      status: response.status,
+      data: json
+  };
+}
+
+async function logout() {
+  try {
+    const confirm = await sendData('/logout', {'logout': 'true'});
+    console.log(confirm.data["message"]);
+    logged_in.innerHTML = "";
+    user_id = "";
+  } catch (error) {
+      console.error('Error:', error);
+  }
+}
   

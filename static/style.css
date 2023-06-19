@@ -426,6 +426,14 @@ position: relative;
     margin-left: 3em;
   }
 
+  .logged_in {
+    color: #818181;
+    font-size: 0.75em;
+    font-style: italic;
+    padding: 1.5em;
+    margin-top: 1em;
+  }
+
   a.closebtn:hover {
     background-color: var(--raisin-black-2);
   }
