@@ -14,8 +14,8 @@ async function checkWord(word) {
 
     // Check for required letter and vowel
     if (!word.startsWith(s_letter.toLowerCase()) || !word.includes(v_letter.toLowerCase())) {
-        errorMsg.innerHTML = `Word must start with ${s_letter.toUpperCase()} and include ${v_letter.toUpperCase()}`
-        errorModal.show()
+        errorMsg.innerHTML = `Word must start with ${s_letter.toUpperCase()} and include ${v_letter.toUpperCase()}`;
+        errorModal.show();
         setTimeout(function() {
         errorModal.close();
         resetForm();
@@ -25,8 +25,8 @@ async function checkWord(word) {
     
     // check if word has already been entered
     if (tried_words.includes(word)) {
-        errorMsg.innerHTML = "Already Tried Word"
-        errorModal.show()
+        errorMsg.innerHTML = "Already Tried Word";
+        errorModal.show();
         setTimeout(function() {
           errorModal.close();
           resetForm();
@@ -43,8 +43,8 @@ async function checkWord(word) {
     const word_score = data.game_score; 
 
     if (word_score === null) {
-        errorMsg.innerHTML = "Unknown Word"
-        errorModal.show()
+        errorMsg.innerHTML = "Unknown Word";
+        errorModal.show();
         setTimeout(function() {
           errorModal.close();
           resetForm();
@@ -68,65 +68,68 @@ async function checkWord(word) {
 
 // this function submits formData to the backend and returns a json response - route should be a string as '/<route>'
 async function submitForm(formData, route) {
-    try {
-      const response = await fetch(route, {
-        method: 'POST',
-        body: formData
-      });
-      if (!response.ok && response.status !== 400) { // whilst 400's are errors, we want to capture the response
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-  
-      return data;
-  
-    } catch (error) {
-      console.error('Error:', error);
+  try {
+    const response = await fetch(route, {
+      method: 'POST',
+      body: formData
+    });
+    if (!response.ok && response.status !== 400) { // whilst 400's are errors, we want to capture the response
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+    const data = await response.json();
+
+    return data;
+
+  } catch (error) {
+    console.error('Error:', error);
   }
+}
+
 
 // reset the form from the current ( unsubmitted word ) onward - edge case if user keeps typing before reset mitigated by that.
 // this way we know how far back to reset the board after a duplicate, unknown, invalid word etc.
 function resetForm() {
-    // we use the tried_words array to infer what the current non-submitted word index is  
-    const indexes = {0: 1, 1: 6, 2: 11, 3: 16, 4: 21}; // dict is {array_length: index} i.e 0 words = index 1, 1 words = index 6
-    start_index = indexes[tried_words.length]
+  // we use the tried_words array to infer what the current non-submitted word index is  
+  const indexes = {0: 1, 1: 6, 2: 11, 3: 16, 4: 21}; // key: value is {array_length: index} i.e 0 words = index 1, 1 words = index 6
+  start_index = indexes[tried_words.length];
 
-    for (let i = start_index; i <= gameLength; i++ ){
-        document.getElementById(i.toString()).value = '';
-    }
-    lastFocusedInput = document.getElementById(start_index.toString());
-    lastFocusedInput.focus();
+  for (let i = start_index; i <= gameLength; i++ ){
+      document.getElementById(i.toString()).value = '';
   }
+  lastFocusedInput = document.getElementById(start_index.toString());
+  lastFocusedInput.focus();
+}
 
-  function disableAllForms(){
-    document.querySelectorAll("input").forEach(input => (input.disabled = true));
-    
-    document.activeElement.blur();
-  }
+function disableAllForms(){
+  document.querySelectorAll("input").forEach(input => (input.disabled = true));
+  
+  document.activeElement.blur();
+}
 
-  async function gameOver() {
-    disableAllForms();
-    const flip = document.querySelector(".flip-card-inner");
-    flip.style.transform = "rotateY(180deg)";
-    flipped = true;
-    
-    const game_over = document.querySelector(".flip-card-back");
-    const wordList = top_words.map(word => `<p>${word[0]} for ${word[1]} points</p>`).join('');
 
-    game_over.innerHTML = 
-    `<h1>Game Over</h1>
-    <p> The top 5 words were:</p><br>
-    <p>${wordList}</p><br>
-    <button class="reset-button" onclick="location.reload()">Restart Game</button>`;
-    console.log("Game Over");
-    try {
-      await sendData('/gameover', {'score': score});
-  } catch (error) {
-      console.error('Error:', error);
-  }
+// this function is called with the game is over. It calls the backend and sends the score.
+async function gameOver() {
+  disableAllForms();
+  const flip = document.querySelector(".flip-card-inner");
+  flip.style.transform = "rotateY(180deg)";
+  flipped = true;
+  
+  const game_over = document.querySelector(".flip-card-back");
+  const wordList = top_words.map(word => `<p>${word[0]} for ${word[1]} points</p>`).join('');
 
-  }
+  game_over.innerHTML = 
+  `<div class=stats><h1>Game Over</h1>
+  <p> The top 5 words were:</p><br>
+  <p>${wordList}</p><br></div>
+  <button class="reset-button" onclick="location.reload()">Restart Game</button>`;
+  console.log("Game Over");
+  try {
+    await sendData('/gameover', {'score': score});
+} catch (error) {
+    console.error('Error:', error);
+}
+
+}
 
 // generic function used to send non-form data to the backend using JSON
 async function sendData(url = '', data = {}) {
@@ -150,6 +153,8 @@ async function sendData(url = '', data = {}) {
   };
 }
 
+
+// function to logout the user
 async function logout() {
   try {
     const confirm = await sendData('/logout', {'logout': 'true'});
@@ -160,4 +165,26 @@ async function logout() {
       console.error('Error:', error);
   }
 }
-  
+
+// function to retrieve user stats
+async function get_stats() {
+  try {
+    const user_stats = await sendData('/stats', {'message': 'get_stats'});
+    const games_played = user_stats.data[0];
+    const highest_score = user_stats.data[1];
+    const cumulative_score = user_stats.data[2];
+    const average_score = Math.round(cumulative_score / games_played);
+    htmlContent = `<h1>Stats</h1><br>
+    <div class = stats>
+    <p>Games Played: ${games_played}</p>
+    <p>Highest Score: ${highest_score}</p>
+    <p>Average Score: ${average_score}</p>
+    </div>
+            <button type="button" class="reset-button" onclick="flip()">Close</button>`;
+    return htmlContent;
+
+  } catch (error) {
+    console.error('Error:', error);
+
+  }
+}
