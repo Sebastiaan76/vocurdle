@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Space+Mono:ital,wght@0,700;1,400&display=swap');
 
-/* CSS HEX */
 :root {
     --eminence: #631d76ff;
     --magenta-haze: #e68ab2;
@@ -21,7 +20,6 @@ body {
     font-size: 1.5em;
 }
 
-
 header {
     display: flex;
     justify-content: space-between;
@@ -31,13 +29,12 @@ header {
 }
 
 li, a, input {
-    font-family: "Space Mono", sans-serif;
+    font-family: "Roboto Mono", sans-serif;
     font-weight: 700;
     font-size: 1em;
     color: var(--eminence);
     text-decoration: none;
 }
-
 
 .nav-icon {
     width: 2.5em; 
@@ -81,14 +78,11 @@ nav {
     padding: 0em 0.75em;
 }
 
-
-
 .nav_links li a {
     transition: all 0.3s ease 0s;
 }
 
 .nav_links li a:hover {
-    transition: all 0.3s ease 0s;
     color: var(--white);
 }
 
@@ -126,7 +120,6 @@ nav {
     color: var(--white);
     font-family: 'Roboto Mono', sans-serif;
 }
-
 
 input {
     border-radius: 0.5em;
@@ -194,7 +187,6 @@ input:focus {
     height: auto;
 }
 
-
 .score {
     display: flex;
     justify-content: center;
@@ -204,8 +196,7 @@ input:focus {
     color: var(--white);
 }
 
-
-#helpModal, #infoModal, #menuModal {
+#helpModal {
 position: fixed;
 top: 30%;
 left: 50%;
@@ -220,7 +211,6 @@ border-width: 2px;
 border-radius: 1em;
 padding: 1em;
 width: 30vw;
-
 }
 
 #errorModal {
@@ -242,12 +232,11 @@ p.error-msg  {
     background: var(--raisin-black);
 }
 
-#helpModal .dheader, #infoModal .dheader, #menuModal .dheader, #errorModal .dheader {
+#helpModal .dheader, #errorModal .dheader {
 display: flex;
 align-items: center;
 justify-content: space-between;
 }
-
 
 #closeDialogHeader {
 position: absolute;
@@ -309,9 +298,6 @@ position: relative;
     margin-right: 0.5em;
 }
 
-
-
-
 .flip-card {
     background-color: transparent;
     perspective: 2500px;
@@ -327,7 +313,6 @@ position: relative;
     text-align: center;
     transition: transform 0.8s;
     transform-style: preserve-3d;
-    
 }
 
 .flip-card-front, .flip-card-back {
@@ -335,8 +320,7 @@ position: relative;
     width: 100%;
     height: auto;
     -webkit-backface-visibility: hidden; /* Safari */
-    backface-visibility: hidden;
-    
+    backface-visibility: hidden; 
 }
 
 .flip-card-front {
@@ -389,7 +373,6 @@ position: relative;
 .stats h1 p {
     color: var(--white);
     font-family: 'Roboto Mono', sans-serif;
-
 }
 
 .sidenav {
@@ -449,7 +432,7 @@ position: relative;
   }
 
 
-  @media (max-width: 1350px){
+@media (max-width: 1350px){
     #helpModal {
         width: 100vw;
     }
@@ -545,6 +528,5 @@ position: relative;
         width: 28em;
         height: 24em;
         margin-top: 0.5em;  
-    }
-    
+    } 
 }
