@@ -10,10 +10,10 @@ const gameLength = 25; // 5 words per game === 25
 // variables we track to do 'stuff'
 let lastFocusedInput = null;
 let tried_words = [];
-let current_word = ""
+let current_word = "";
 let start_index = 1;
 
-// set focus on the first element
+// set focus on the first form element - first letter of first word
 if(firstInput) {
     firstInput.focus();
     firstInput.click();
@@ -30,30 +30,34 @@ bubble_events.forEach(e => {
 // listen to non-bubbling events
 nobubble_events.forEach(e => {
     forms.addEventListener(e, eventDelegate, true);
-})
+});
+
 
 /* *** Function Declarations *** */
 // Event Delegation - route the various events captured to the right handlers
 function eventDelegate(e) {
     const targetElement = e.target;
-    // if we are flipped on a login, register form etc, we don't want the usual event handling
+    // if we are flipped on a login, register form etc, we don't want the usual event handling as we need
+    // users to be able to enter form data
     if (menu_flip.style.transform === "rotateY(180deg)"){
         return;
     }
-    lastFocusedInput.focus(); // catch all to ensure if user clicks: BUG on error word lastFocusedInput isn't where we want to be
+    lastFocusedInput.focus(); // catch all to ensure if user clicks off the board we re-focus where we were
+
+    // lets keep the event capturing to our input form fields
     if (targetElement.tagName.toLowerCase() === 'input') {
         switch (e.type) {
             case 'input':
-                userInput(e);
+                userInput(e); // filter alpha only + make uppercase
                 break;
             case 'keydown':
-                if (e.key === 'Tab') stopDefault(e);
-                keyDown(e);
+                if (e.key === 'Tab') stopDefault(e); // if it's TAB don't allow
+                keyDown(e); // send key to keyDown for further processing
                 break;
             case 'mousedown':
             case 'click':
             case 'touchstart':
-                stopDefault(e);
+                stopDefault(e); // no clicking randomly. Keep on the game board
                 break;
             default:
                 break;
@@ -71,7 +75,6 @@ function stopDefault(e) {
         e.preventDefault();
         }
     }
-
 
     
 // Keydown Handler

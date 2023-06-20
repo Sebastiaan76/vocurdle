@@ -3,6 +3,7 @@ import time
 import csv
 import sqlite3
 
+
 # function to take list of words in \n delimited text file and create a CSV with the word and it's frequency per 1M words
 # as determined by datamuse api. 
 # example result from datamuse: [{'word': 'thick', 'score': 65889, 'tags': ['f:29.603049']}] - note tags key is a list
@@ -27,6 +28,7 @@ def get_frequency(source, dest, request_per_second):
                 out_file.write(f"{d['word']},{f_value}\n")
                 time.sleep(rps)
 
+
 # quick function to find the highest 'f' tag ( word frequency ) in the word list. 
 # need this to figure out how to normalise the scores now.
 def find_highest(file):
@@ -38,6 +40,7 @@ def find_highest(file):
                 highest.update({"word": row['word'], "raw_score": row["raw_score"]})
     return highest
 
+
 # already know from the above function that 1901 is the highest
 def find_lowest(file):
     lowest = {'word': '', 'raw_score': 1901}
@@ -48,6 +51,7 @@ def find_lowest(file):
                 lowest.update({"word": row['word'], "raw_score": row["raw_score"]})
     return lowest
 
+
 # function to apply a standard scrabble score as the basis for our final score
 def word_score(word):
     scrabble_letter_scores = {
@@ -57,6 +61,8 @@ def word_score(word):
     scrabble_score = sum(scrabble_letter_scores.get(letter, 0) for letter in word.lower())
     
     return scrabble_score
+
+
 # this function will take a words raw_score ( word frequency from datamuse ) and assign a multiplier
 # smaller scores ( less common words ) get a larger multiplier. This is a non-scientific application based on...observing that data
 # and noting that 90% of words score below 0.05
@@ -90,8 +96,3 @@ def load_database(file):
             print(f"inserted {row['word']}")
         conn.commit()
         conn.close()
-
-
-
-
-

@@ -1,25 +1,18 @@
 // get our buttons
 const help = document.getElementById("help-button");
-const info = document.getElementById("info-button");
 const menu = document.getElementById("menu-button");
 
 // get our modals
 const helpModal = document.getElementById("helpModal");
-const infoModal = document.getElementById("infoModal");
 const errorModal = document.getElementById("errorModal");
 
 // functions called on clicks
 const showHelp = () => {
     helpModal.showModal();
-}
-
-const showInfo = () => {
-    infoModal.showModal();
-}
+};
 
 // add Event listeners
 help.addEventListener('click', showHelp);
-info.addEventListener('click', showInfo);
 
 // close dialogs when 'x' button is clicked
 const closeDialog = () => {
@@ -88,7 +81,7 @@ function flip() {
     lastFocusedInput.focus();
 }
 
-function handleMenuAction(menuId) {
+async function handleMenuAction(menuId) {
     let htmlContent;
     switch(menuId) {
         case 'register-menu':
@@ -128,12 +121,12 @@ function handleMenuAction(menuId) {
             <button type="button" class="reset-button" onclick="logout(); flip()">Logout</button>`;
             break;
         case 'stats-menu':
-            htmlContent = `<h1>Stats</h1>
-            <button type="button" class="reset-button" onclick="flip()">Close</button>`;
+            htmlContent = await get_stats();
             break;
         default:
             htmlContent = '';
     }
+    // only flip if we aren't already
     if (flipped === false){
         flip();
         flipped = true;
@@ -141,6 +134,3 @@ function handleMenuAction(menuId) {
     menu_content.innerHTML = htmlContent;
     lastFocusedInput.focus();
 }
-
-
-

@@ -9,6 +9,7 @@
   </head>
   <body>
     <header>
+      <!-- Side Nav (starts hidden)-->
       <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a id="register-menu" onclick="handleMenuAction(this.id); closeNav()" href="#">Register</a>
@@ -21,44 +22,20 @@
           <img onclick="openNav()" class="menu nav-icon" id="menu-button" src="../static/icons/menu_FILL0_wght400_GRAD0_opsz48.svg" alt="menu">
       </div>
         <img class="logo" src="../static/images/vocurdle.svg" alt="logo">
-      
         <!-- Modals -->
         <dialog id="helpModal">
           <header class="dheader">
-            <h2 class="dheader">How to play</h2>
-            <button onclick="closeDialog()" id="closeDialogHeader">X</button>
+            <button class="closebtn" onclick="closeDialog()" id="closeDialogHeader">&times;</button>
           </header>
-          <section>
-            <p>The game works as follows:<br><br>Words need to start with the 
-              start letter, and include the required vowel. the aim is to choose more obscure words as they score higher</p>
-          </section>
-    
-        </dialog>
-        <dialog id="infoModal">
-          <header class="dheader">
-            <h2 class="dheader">User Stats</h2>
-            <button onclick="closeDialog()" id="closeDialogHeader">X</button>
-          </header>
-          <section>
-            <p>Play Statistics Go here</p>
+          <section class="stats"><h1>How to Play</h1>
+            <br>Words need to start with the 
+              start letter, and include the required vowel. The aim is to choose more obscure words as they score higher</p>
           </section>
         </dialog>
-          
-        
-        <dialog id="menuModal">
-          <header class="dheader">
-            <h2 class="dheader">Menu</h2>
-            <button onclick="closeDialog()" id="closeDialogHeader">X</button>
-          </header>
-          <section>
-            <p>Menu goes here</p>
-          </section>
-        </dialog>
-        <!-- End Modals -->
+      <!-- Nav link(s) -->
       <nav>
           <ul class="nav_links">
               <li><a href="#"><img class="nav-icon" id="help-button" src="../static/icons/help_FILL0_wght400_GRAD0_opsz48.svg" alt="help"></a></li>
-              <li><a href="#"><img class="nav-icon" id="info-button" src="../static/icons/info_FILL0_wght400_GRAD0_opsz48.svg" alt="info"></a></li>
           </ul>
       </nav>
   </header>
@@ -77,10 +54,8 @@
       <div class="req-info">required vowel</div>
     </div>
   </div>
-
   <!-- score -->
   <div class="score"></div>
-  
     <!-- Main content -->
     <div class="main-container">
         {% block main %}{% endblock %}
@@ -88,15 +63,15 @@
     <script src="../static/modals.js" defer></script>
     <script src="../static/game.js" defer></script>
     <script src="../static/forms.js"></script>
-    
     <script>
-      // info from the main view - declaring here so JS has access in script.js
+      // info from the main route of flask - declaring here so JS has access in scripts
       const potential = "{{ potential_score }}";
       const top_words = {{ words_tuple|tojson|safe }};
       const s_letter = "{{ start_letter }}";
       const v_letter = "{{ vowel_letter }}";
       const logged_in_on_refresh = "{{ still_logged_in }}";
       const logged_in = document.querySelector(".logged_in");
+      // snippet to refresh the logged in user if there is still an active session
       if (logged_in_on_refresh !== ""){
         logged_in.innerHTML = `Logged in: ${logged_in_on_refresh}`;
       }
