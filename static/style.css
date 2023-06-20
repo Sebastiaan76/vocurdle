@@ -229,7 +229,7 @@ width: 30vw;
     left: 50%;
     transform: translate(-50%, -50%);
     color: rgb(255, 255, 255);
-    background-color: var(--white);
+    
     padding: 0.1em;
     border-radius: 5px;
     font-family: 'Roboto Mono', sans-serif;

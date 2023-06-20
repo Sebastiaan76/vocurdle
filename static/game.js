@@ -100,9 +100,10 @@ function resetForm() {
   lastFocusedInput.focus();
 }
 
+
+// helper function - disables all forms at the end of the game
 function disableAllForms(){
   document.querySelectorAll("input").forEach(input => (input.disabled = true));
-  
   document.activeElement.blur();
 }
 
@@ -113,22 +114,18 @@ async function gameOver() {
   const flip = document.querySelector(".flip-card-inner");
   flip.style.transform = "rotateY(180deg)";
   flipped = true;
-  
   const game_over = document.querySelector(".flip-card-back");
-  const wordList = top_words.map(word => `<p>${word[0]} for ${word[1]} points</p>`).join('');
-
-  game_over.innerHTML = 
+  try {
+    const end_game = await sendData('/gameover', {'score': score});
+    const wordList = end_game.data.top_words.map(word => `<p>${word[0]} for ${word[1]} points</p>`).join('');
+    game_over.innerHTML = 
   `<div class=stats><h1>Game Over</h1>
   <p> The top 5 words were:</p><br>
   <p>${wordList}</p><br></div>
   <button class="reset-button" onclick="location.reload()">Restart Game</button>`;
-  console.log("Game Over");
-  try {
-    await sendData('/gameover', {'score': score});
-} catch (error) {
+  } catch (error) {
     console.error('Error:', error);
-}
-
+  }
 }
 
 // generic function used to send non-form data to the backend using JSON

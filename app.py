@@ -33,13 +33,15 @@ def vocurdle():
     potential_score = info["potential_score"]
     required_letters = info["required_letters"]
 
+    session['words_tuple'] = words_tuple # store the top 5 words in the session - used at GameOver to show the top words
+
     # check if there is an active session, and if so, send the user_id to the frontend
-    if session:
+    if session.get('user_id'):
         logged_in = session["user_id"]
     else:
         logged_in = ""
 
-    return render_template("index.html", still_logged_in=logged_in, words_tuple=words_tuple, potential_score=potential_score, start_letter=required_letters[0], vowel_letter=required_letters[1])
+    return render_template("index.html", still_logged_in=logged_in, potential_score=potential_score, start_letter=required_letters[0], vowel_letter=required_letters[1])
     
 # function used to retrieve stats   
 @app.route("/stats", methods=["POST"])
@@ -79,7 +81,9 @@ def gameover():
         conn.commit()
         conn.close()
 
-        return jsonify({'message': 'data received'})
+        words_tuple = session.get('words_tuple')
+
+        return jsonify({'message': 'data received', 'top_words': words_tuple})
 
 
 # This route is used to calculate individual word scores
@@ -99,7 +103,9 @@ def logout():
         data = request.get_json()
         if data["logout"] == "true":
             logging_out = session["user_id"]
+            words_tuple = session.get('words_tuple')
             session.clear()
+            session['words_tuple'] = words_tuple
             return jsonify({'message': f'user {logging_out} logged out'})
 
 
@@ -107,6 +113,7 @@ def logout():
 @app.route("/login", methods=["GET", "POST"])
 def login(): 
     if request.method == "POST":
+        words_tuple = session.get("words_tuple", None)
         session.clear()
         user_id = request.form.get("user_id")
 
@@ -134,6 +141,8 @@ def login():
 
         # Create the session
         session["user_id"] = row[0]
+        if words_tuple: # Only put words_tuple back in the session if it's defined (should always be defined)
+            session["words_tuple"] = words_tuple
         conn.close()
 
         # User is logged in
