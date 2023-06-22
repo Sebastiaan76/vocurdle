@@ -64,22 +64,23 @@ def gameover():
         data = request.get_json()
         score = data["score"]
         
-        # update the database
-        conn = sqlite3.connect("words.db")
-        c = conn.cursor()
+        if session.get('user_id') is not None:
+            # update the database
+            conn = sqlite3.connect("words.db")
+            c = conn.cursor()
 
-        # update the users game count++
-        c.execute("UPDATE users SET games_played = games_played + 1 WHERE user_id = ?", (session["user_id"],))
-        conn.commit()
+            # update the users game count++
+            c.execute("UPDATE users SET games_played = games_played + 1 WHERE user_id = ?", (session["user_id"],))
+            conn.commit()
 
-        # check if this is their best score so far, if so, update it
-        c.execute("UPDATE users SET highest_score = ? WHERE user_id = ? AND highest_score < ?", (score, session["user_id"], score))
-        conn.commit()
+            # check if this is their best score so far, if so, update it
+            c.execute("UPDATE users SET highest_score = ? WHERE user_id = ? AND highest_score < ?", (score, session["user_id"], score))
+            conn.commit()
 
-        # Update the cumulative score
-        c.execute("UPDATE users SET cumulative_score = cumulative_score + ? WHERE user_id = ?", (score, session["user_id"]))
-        conn.commit()
-        conn.close()
+            # Update the cumulative score
+            c.execute("UPDATE users SET cumulative_score = cumulative_score + ? WHERE user_id = ?", (score, session["user_id"]))
+            conn.commit()
+            conn.close()
 
         words_tuple = session.get('words_tuple')
 
