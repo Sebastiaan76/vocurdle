@@ -1,6 +1,6 @@
 # **Vocurdle - A Vocabulary based word game**
 
-**Video Demo:** https://youtube.com/
+**Video Demo:** [https://youtu.be/67y28d_k8sk  ](https://youtu.be/67y28d_k8sk)
 
 **Description:** Vocurdle is a vocabulary based word game with a similar look and feel to 'Wordle'.
 
