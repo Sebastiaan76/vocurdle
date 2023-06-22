@@ -171,17 +171,22 @@ async function get_stats() {
     const highest_score = user_stats.data[1];
     const cumulative_score = user_stats.data[2];
     const average_score = Math.round(cumulative_score / games_played);
-    htmlContent = `<h1>Stats</h1><br>
-    <div class = stats>
-    <p>Games Played: ${games_played}</p>
-    <p>Highest Score: ${highest_score}</p>
-    <p>Average Score: ${average_score}</p>
-    </div>
-            <button type="button" class="reset-button" onclick="flip()">Close</button>`;
+    if (user_stats.data.message === "no user logged in"){
+      htmlContent = `<h1>Stats</h1><br>
+      <div class = stats>Login to see your Statistics</div>
+      <button type="button" class="reset-button" onclick="flip()">Close</button>`;
+    } else {
+      htmlContent = `<h1>Stats</h1><br>
+      <div class = stats>
+      <p>Games Played: ${games_played}</p>
+      <p>Highest Score: ${highest_score}</p>
+      <p>Average Score: ${average_score}</p>
+      </div>
+      <button type="button" class="reset-button" onclick="flip()">Close</button>`;
+    }
     return htmlContent;
 
   } catch (error) {
     console.error('Error:', error);
-
   }
 }

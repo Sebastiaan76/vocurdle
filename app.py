@@ -46,7 +46,7 @@ def vocurdle():
 # function used to retrieve stats   
 @app.route("/stats", methods=["POST"])
 def stats():
-    if request.method == "POST" and request.get_json()["message"] == "get_stats" and session:
+    if request.method == "POST" and request.get_json()["message"] == "get_stats" and session.get('user_id'):
         # lets check the database
         conn = sqlite3.connect("words.db")
         c = conn.cursor()
@@ -54,7 +54,7 @@ def stats():
         row = c.fetchone()
         return jsonify(row), 200
     else:
-        return jsonify({"message": "no user logged in"}), 400
+        return jsonify({"message": "no user logged in"}), 200
 
 # this runs when the user finishes a game. It takes the game score and updates the user stats
 @app.route("/gameover", methods=["POST"])
